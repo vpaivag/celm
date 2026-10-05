@@ -1,0 +1,280 @@
+@import 'tailwindcss';
+@import "tw-animate-css";
+@import "shadcn-svelte/tailwind.css";
+@import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+
+@custom-variant dark (&:is(.dark *));
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+/*
+ * cualeslamejor.cl · sistema de marca v0.1
+ *
+ * Los tokens base de la marca se mapean a los nombres de shadcn:
+ *   --bg → --background · --surface → --card · --surface-2 → --secondary / --muted
+ *   --line → --border · --ink → --foreground / --primary · --muted (texto) → --muted-foreground
+ * El amarillo de marca vive en --highlight (shadcn ya usa --accent para hovers neutros).
+ * El amarillo nunca es texto sobre fondo claro: para eso existe --highlight-ink.
+ */
+:root {
+	/* base · claro */
+	--background: #f6f6f9;
+	--foreground: #14164a;
+	--card: #ffffff;
+	--card-foreground: #14164a;
+	--popover: #ffffff;
+	--popover-foreground: #14164a;
+	--primary: #14164a;
+	--primary-foreground: #ffffff;
+	--primary-hover: #262a7a;
+	--secondary: #eeeef4;
+	--secondary-foreground: #14164a;
+	--muted: #eeeef4;
+	--muted-foreground: #5b5e80;
+	--accent: #eeeef4;
+	--accent-foreground: #14164a;
+	--destructive: #b3261e;
+	--destructive-ink: #9e2018;
+	--border: #e2e3ec;
+	--input: #c9cbdb;
+	--ring: #14164a;
+	--disabled-foreground: #9a9cb8;
+
+	/* marca */
+	--highlight: #f6c434;
+	--highlight-ink: #7a5a00;
+	--on-highlight: #14164a;
+	--highlight-soft: #fffbeb;
+
+	/* semánticos */
+	--rating: #b07f00;
+	--rating-empty: #d6d7e3;
+	--podium-1-bg: var(--highlight);
+	--podium-1-fg: #14164a;
+	--podium-line: var(--foreground);
+	--official-surface: #eef1f4;
+	--official-line: #c8d0da;
+	--official-ink: #2e3a4d;
+	--official-tag: #8a96a8;
+	--logo-tile: #f1f1f5;
+	--logo-tile-ink: #8a8ca8;
+
+	--state-building: #5b5e80;
+	--state-nodata-bg: #eeeef4;
+	--state-nodata-fg: #5b5e80;
+	--state-review-bg: #e6e9f4;
+	--state-review-fg: #3e4c80;
+	--state-review-line: #c9cfea;
+	--state-error-bg: #fbeae8;
+	--state-error-fg: #9e2018;
+	--state-success-bg: #e5f3eb;
+	--state-success-fg: #1a6a42;
+
+	/* sombra (en oscuro la elevación se marca con --secondary) */
+	--shadow-1: 0 1px 2px rgb(20 22 74 / 0.08), 0 1px 1px rgb(20 22 74 / 0.04);
+	--shadow-2: 0 8px 24px rgb(20 22 74 / 0.12), 0 2px 6px rgb(20 22 74 / 0.06);
+
+	--radius: 0.75rem;
+
+	--chart-1: #14164a;
+	--chart-2: #f6c434;
+	--chart-3: #5b5e80;
+	--chart-4: #a9abd0;
+	--chart-5: #7a5a00;
+	--sidebar: #ffffff;
+	--sidebar-foreground: #14164a;
+	--sidebar-primary: #14164a;
+	--sidebar-primary-foreground: #ffffff;
+	--sidebar-accent: #eeeef4;
+	--sidebar-accent-foreground: #14164a;
+	--sidebar-border: #e2e3ec;
+	--sidebar-ring: #14164a;
+}
+
+.dark {
+	--background: #0e1036;
+	--foreground: #ffffff;
+	--card: #1a1d55;
+	--card-foreground: #ffffff;
+	--popover: #1a1d55;
+	--popover-foreground: #ffffff;
+	/* en oscuro el botón primario se invierte a blanco */
+	--primary: #ffffff;
+	--primary-foreground: #14164a;
+	--primary-hover: #e4e5f5;
+	--secondary: #23266a;
+	--secondary-foreground: #ffffff;
+	--muted: #23266a;
+	--muted-foreground: #a9abd0;
+	--accent: #23266a;
+	--accent-foreground: #ffffff;
+	--destructive: #ff9c92;
+	--destructive-ink: #ff9c92;
+	--border: #2c2f6b;
+	--input: #3a3d78;
+	--ring: #ffffff;
+	--disabled-foreground: #5b5e80;
+
+	--highlight-ink: #f6c434;
+	--highlight-soft: #2a2a4a;
+
+	--rating: #f6c434;
+	--rating-empty: #3a3d78;
+	--podium-line: #ffffff;
+	--official-surface: #1c2433;
+	--official-line: #33405a;
+	--official-ink: #c9d3e2;
+	--official-tag: #5c6b84;
+
+	--state-building: #a9abd0;
+	--state-nodata-bg: #23266a;
+	--state-nodata-fg: #a9abd0;
+	--state-review-bg: #262b63;
+	--state-review-fg: #b6c2ec;
+	--state-review-line: #3e4c80;
+	--state-error-bg: #3a1620;
+	--state-error-fg: #ff9c92;
+	--state-success-bg: #10302a;
+	--state-success-fg: #7fd6a6;
+
+	--shadow-1: none;
+	--shadow-2: 0 0 0 1px var(--border);
+
+	--sidebar: #1a1d55;
+	--sidebar-foreground: #ffffff;
+	--sidebar-primary: #f6c434;
+	--sidebar-primary-foreground: #14164a;
+	--sidebar-accent: #23266a;
+	--sidebar-accent-foreground: #ffffff;
+	--sidebar-border: #2c2f6b;
+	--sidebar-ring: #ffffff;
+}
+
+@theme inline {
+	--font-sans: 'Bricolage Grotesque Variable', system-ui, sans-serif;
+	--font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+	/* tipo (móvil 360px → escritorio ≥1024px) */
+	--text-display: clamp(2.125rem, 1.4rem + 3.2vw, 3.5rem);
+	--text-display--line-height: 1.02;
+	--text-display--letter-spacing: -0.03em;
+	--text-display--font-weight: 800;
+	--text-h1: clamp(1.75rem, 1.5rem + 1.1vw, 2.25rem);
+	--text-h1--line-height: 1.1;
+	--text-h1--letter-spacing: -0.02em;
+	--text-h1--font-weight: 800;
+	--text-h2: clamp(1.375rem, 1.25rem + 0.55vw, 1.625rem);
+	--text-h2--line-height: 1.2;
+	--text-h2--font-weight: 600;
+	--text-h3: 1.125rem;
+	--text-h3--line-height: 1.3;
+	--text-h3--font-weight: 600;
+	--text-body: 1rem;
+	--text-body--line-height: 1.5;
+	--text-small: 0.875rem;
+	--text-small--line-height: 1.45;
+	--text-caption: 0.75rem;
+	--text-caption--line-height: 1.4;
+	--text-caption--font-weight: 500;
+
+	--color-highlight: var(--highlight);
+	--color-highlight-ink: var(--highlight-ink);
+	--color-on-highlight: var(--on-highlight);
+	--color-highlight-soft: var(--highlight-soft);
+	--color-primary-hover: var(--primary-hover);
+	--color-destructive-ink: var(--destructive-ink);
+	--color-disabled-foreground: var(--disabled-foreground);
+	--color-rating: var(--rating);
+	--color-rating-empty: var(--rating-empty);
+	--color-podium-1-bg: var(--podium-1-bg);
+	--color-podium-1-fg: var(--podium-1-fg);
+	--color-podium-line: var(--podium-line);
+	--color-official: var(--official-surface);
+	--color-official-line: var(--official-line);
+	--color-official-ink: var(--official-ink);
+	--color-official-tag: var(--official-tag);
+	--color-logo-tile: var(--logo-tile);
+	--color-logo-tile-ink: var(--logo-tile-ink);
+	--color-state-building: var(--state-building);
+	--color-state-nodata: var(--state-nodata-bg);
+	--color-state-nodata-foreground: var(--state-nodata-fg);
+	--color-state-review: var(--state-review-bg);
+	--color-state-review-foreground: var(--state-review-fg);
+	--color-state-review-line: var(--state-review-line);
+	--color-state-error: var(--state-error-bg);
+	--color-state-error-foreground: var(--state-error-fg);
+	--color-state-success: var(--state-success-bg);
+	--color-state-success-foreground: var(--state-success-fg);
+
+	--shadow-1: var(--shadow-1);
+	--shadow-2: var(--shadow-2);
+
+	/* radios de marca: datos oficiales 6 · inputs/logos 12 · tarjetas 18 · globo */
+	--radius-official: 6px;
+	--radius-tile: 12px;
+	--radius-card: 18px;
+	--radius-bubble: 18px 18px 18px 6px;
+	--radius-bubble-sm: 14px 14px 14px 4px;
+
+	--color-sidebar-ring: var(--sidebar-ring);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-foreground: var(--sidebar-foreground);
+	--color-sidebar: var(--sidebar);
+	--color-chart-5: var(--chart-5);
+	--color-chart-4: var(--chart-4);
+	--color-chart-3: var(--chart-3);
+	--color-chart-2: var(--chart-2);
+	--color-chart-1: var(--chart-1);
+	--color-ring: var(--ring);
+	--color-input: var(--input);
+	--color-border: var(--border);
+	--color-destructive: var(--destructive);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-accent: var(--accent);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-muted: var(--muted);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-secondary: var(--secondary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-primary: var(--primary);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-popover: var(--popover);
+	--color-card-foreground: var(--card-foreground);
+	--color-card: var(--card);
+	--color-foreground: var(--foreground);
+	--color-background: var(--background);
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
+	--radius-2xl: calc(var(--radius) * 1.8);
+	--radius-3xl: calc(var(--radius) * 2.2);
+	--radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply bg-background text-foreground antialiased;
+	}
+	html {
+		@apply font-sans;
+	}
+	a:not([data-slot]) {
+		@apply underline underline-offset-3 hover:text-highlight-ink;
+	}
+}
+
+@utility focus-halo {
+	/* foco: borde navy + halo amarillo suave. Visible sin ser texto amarillo. */
+	border-color: var(--ring);
+	box-shadow: 0 0 0 1px var(--ring), 0 0 0 4px rgb(246 196 52 / 0.45);
+}
