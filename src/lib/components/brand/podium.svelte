@@ -1,4 +1,5 @@
 <script lang="ts">
+	import * as Card from '#lib/components/ui/card/index.js';
 	import { formatCount, formatScore } from '#lib/format.js';
 	import ConfidenceMeter from './confidence-meter.svelte';
 	import LogoTile from './logo-tile.svelte';
@@ -12,7 +13,7 @@
 </script>
 
 <div class="flex flex-col gap-2.5">
-	<div class="flex flex-col gap-3.5 rounded-card p-[18px] shadow-[inset_0_0_0_1px_var(--border)]">
+	<Card.Root class="gap-3.5 p-[18px] text-base">
 		<div class="flex items-center gap-3.5">
 			<PodiumRank rank={1} size={52} />
 			<LogoTile src={leader.logo} alt={leader.name} />
@@ -28,11 +29,11 @@
 			</div>
 			{#if leader.confidence}<ConfidenceMeter level={leader.confidence} />{/if}
 		</div>
-	</div>
+	</Card.Root>
 	{#if rest.length}
 		<div class="grid grid-cols-2 gap-2.5">
 			{#each rest.slice(0, 2) as entry, i (entry.name)}
-				<div class="flex flex-col gap-2.5 rounded-card p-3.5 shadow-[inset_0_0_0_1px_var(--border)]">
+				<Card.Root class="gap-2.5 p-3.5 text-base">
 					<div class="flex items-center gap-2.5">
 						<PodiumRank rank={i + 2} size={36} />
 						<LogoTile src={entry.logo} alt={entry.name} size={36} />
@@ -43,7 +44,7 @@
 						<span class="text-rating">★</span>
 						<span class="text-muted-foreground">· {formatCount(entry.reviews)}</span>
 					</span>
-				</div>
+				</Card.Root>
 			{/each}
 		</div>
 	{/if}

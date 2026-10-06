@@ -15,7 +15,7 @@
 	bind:ref
 	data-slot="input-otp-slot"
 	class={cn(
-		"border-input bg-card data-[active=true]:focus-halo aria-invalid:border-destructive h-[52px] w-11 rounded-tile border-[1.5px] font-mono text-[22px] font-medium transition-all outline-none relative flex items-center justify-center data-[active=true]:z-10",
+		"border-input bg-card data-active:focus-halo aria-invalid:border-destructive h-[52px] w-11 rounded-tile border-[1.5px] font-mono text-[22px] font-medium transition-all outline-none relative flex items-center justify-center data-active:z-10",
 		className
 	)}
 	{...restProps}

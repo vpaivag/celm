@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Badge } from '#lib/components/ui/badge/index.js';
+	import { cn } from '#lib/utils.js';
 	import Rating from './rating.svelte';
 	import VerifiedMark from './verified-mark.svelte';
 
@@ -11,7 +12,8 @@
 		time,
 		pending = false,
 		onreport,
-		onedit
+		onedit,
+		class: className
 	}: {
 		text: string;
 		rating?: number;
@@ -21,6 +23,7 @@
 		pending?: boolean;
 		onreport?: () => void;
 		onedit?: () => void;
+		class?: string;
 	} = $props();
 </script>
 
@@ -45,7 +48,7 @@
 		{/if}
 	</article>
 {:else}
-	<article class="bg-background dark:bg-card flex flex-col gap-2.5 rounded-bubble p-4">
+	<article class={cn('bg-background dark:bg-card flex flex-col gap-2.5 rounded-bubble p-4', className)}>
 		<div class="flex flex-wrap items-center justify-between gap-2">
 			<span class="inline-flex items-center gap-1.5 text-sm font-semibold">
 				<VerifiedMark />{author ?? 'Usuario verificado'}

@@ -22,7 +22,7 @@
 >
 	{#if src}
 		<img {src} {alt} class="h-[70%] w-[70%] object-contain" />
-	{:else if size >= 56}
+	{:else if size >= 64}
 		logo
 	{/if}
 </div>
