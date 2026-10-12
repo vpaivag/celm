@@ -1,0 +1,19 @@
+<!-- Enlace con token_hash (no ConfirmationURL): /auth/confirm lo verifica en el servidor,
+     así funciona aunque el correo se abra en otro navegador o dispositivo. -->
+<div style="font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 32px 24px; color: #14164a;">
+  <p style="font-size: 18px; font-weight: 800; margin: 0 0 24px;">cualeslamejor.cl</p>
+  <h1 style="font-size: 26px; line-height: 1.1; margin: 0 0 12px;">Tu enlace para entrar</h1>
+  <p style="font-size: 16px; line-height: 1.5; margin: 0 0 24px;">
+    Haz clic en el botón para entrar a tu cuenta. El enlace sirve una sola vez y vence en 1 hora.
+  </p>
+  <p style="margin: 0 0 24px;">
+    <a
+      href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next={{ .RedirectTo }}"
+      style="display: inline-block; background: #14164a; color: #ffffff; font-size: 16px; font-weight: 600; text-decoration: none; padding: 14px 24px; border-radius: 999px;"
+      >Entrar a cualeslamejor.cl</a
+    >
+  </p>
+  <p style="font-size: 13px; line-height: 1.5; color: #6b6d8f; margin: 0;">
+    Si no pediste este correo, puedes ignorarlo: nadie entra a tu cuenta sin este enlace.
+  </p>
+</div>

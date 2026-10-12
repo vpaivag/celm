@@ -3,11 +3,12 @@
 	import { page } from '$app/state';
 	import { LogoMark, Wordmark } from '#lib/components/brand/index.js';
 	import { Button } from '#lib/components/ui/button/index.js';
+	import { Input } from '#lib/components/ui/input/index.js';
 	import { Label } from '#lib/components/ui/label/index.js';
 	import * as RadioGroup from '#lib/components/ui/radio-group/index.js';
 	import GoogleButton from '#lib/components/site/google-button.svelte';
 	import PhoneVerify from '#lib/components/site/phone-verify.svelte';
-	import { session, ui } from '#lib/fake-session.svelte.js';
+	import { session } from '#lib/fake-session.svelte.js';
 
 	// Entrar y crear cuenta son la misma puerta: Google → (solo la primera vez) WhatsApp → bienvenida.
 	let step = $state<'google' | 'phone' | 'welcome'>('google');
@@ -18,13 +19,37 @@
 		return v?.startsWith('/') && !v.startsWith('//') ? v : '/';
 	});
 
-	function google() {
-		session.login();
-		if (session.phoneVerified) {
-			// Ya tenía cuenta: no pedimos el teléfono otra vez.
-			ui.welcomeBack = true;
-			goto(back);
-		} else step = 'phone';
+	// Magic link: POST /auth/email manda el correo; el enlace vuelve por /auth/confirm.
+	let email = $state('');
+	let sending = $state(false);
+	let sentTo = $state<string | null>(null);
+	let emailError = $state<string | null>(null);
+
+	const linkError = $derived(
+		{ google: 'No pudimos entrar con Google. Intenta de nuevo.', email: 'El enlace ya no sirve. Pide uno nuevo.' }[
+			page.url.searchParams.get('error') ?? ''
+		] ?? null
+	);
+
+	async function sendLink(e: SubmitEvent) {
+		e.preventDefault();
+		sending = true;
+		emailError = null;
+		try {
+			const res = await fetch('/auth/email', { method: 'POST', body: new FormData(e.currentTarget as HTMLFormElement) });
+			if (res.ok) sentTo = email.trim();
+			else
+				emailError =
+					res.status === 400
+						? 'Revisa el correo: no parece válido.'
+						: res.status === 429
+							? 'Espera un momento antes de pedir otro enlace.'
+							: 'No pudimos enviar el correo. Intenta de nuevo.';
+		} catch {
+			emailError = 'No pudimos enviar el correo. Intenta de nuevo.';
+		} finally {
+			sending = false;
+		}
 	}
 
 	const checks = [
@@ -81,7 +106,42 @@
 					{/each}
 				</ul>
 				<div class="flex-1 lg:h-2 lg:flex-none"></div>
-				<GoogleButton onclick={google} />
+				{#if sentTo}
+					<div role="status" class="bg-background flex flex-col gap-1.5 rounded-tile p-4">
+						<span class="font-semibold">Revisa tu correo</span>
+						<span class="text-muted-foreground text-[15px] leading-normal">
+							Te mandamos un enlace a <span class="text-foreground font-semibold">{sentTo}</span>. Ábrelo para entrar; vence en 1 hora.
+						</span>
+						<Button variant="link" size="sm" class="self-start" onclick={() => (sentTo = null)}>Usar otro correo</Button>
+					</div>
+				{:else}
+					{#if linkError}<p role="alert" class="text-destructive-ink text-sm font-semibold">{linkError}</p>{/if}
+					<form method="POST" action="/auth/login" class="contents">
+						<input type="hidden" name="next" value={back} />
+						<GoogleButton />
+					</form>
+					<div class="text-muted-foreground flex items-center gap-3 text-[13px]">
+						<span class="bg-border h-px flex-1"></span>o con tu correo<span class="bg-border h-px flex-1"></span>
+					</div>
+					<form onsubmit={sendLink} class="flex flex-col gap-2.5">
+						<input type="hidden" name="next" value={back} />
+						<Label for="login-email" class="sr-only">Correo</Label>
+						<Input
+							id="login-email"
+							name="email"
+							type="email"
+							required
+							autocomplete="email"
+							placeholder="tu@correo.cl"
+							bind:value={email}
+							aria-invalid={emailError ? true : undefined}
+						/>
+						{#if emailError}<p role="alert" class="text-destructive-ink text-sm">{emailError}</p>{/if}
+						<Button type="submit" variant="outline" class="h-[52px] w-full" disabled={sending}>
+							{sending ? 'Enviando…' : 'Enviarme un enlace para entrar'}
+						</Button>
+					</form>
+				{/if}
 			{:else if step === 'phone' && session.user}
 				<div class="bg-background flex items-center gap-2.5 rounded-tile px-3 py-2.5 text-sm {codeSent ? 'max-lg:hidden' : ''}">
 					<span class="bg-secondary flex size-7 items-center justify-center rounded-full text-xs font-extrabold">{session.user.initials}</span>
