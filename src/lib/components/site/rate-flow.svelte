@@ -11,6 +11,7 @@
 	import { session, ui, type RateOption } from '#lib/fake-session.svelte.js';
 	import GoogleButton from './google-button.svelte';
 	import PhoneVerify from './phone-verify.svelte';
+	import TermsNote from './terms-note.svelte';
 
 	// Flujo para opinar: (elegir marca) → Google → WhatsApp → opinión → listo.
 	// Móvil: Google en hoja inferior, el resto a pantalla completa. Escritorio: modal centrado.
@@ -138,6 +139,7 @@
 						Así sabemos que eres una persona y no un bot. Tu nombre no se publica, a menos que tú quieras.
 					</p>
 					<GoogleButton onclick={() => (session.login(), advance())} />
+					<TermsNote />
 				{:else if step === 'phone'}
 					<Dialog.Title class="sr-only">Verificar teléfono</Dialog.Title>
 					<PhoneVerify

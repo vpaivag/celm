@@ -8,6 +8,7 @@
 	import * as RadioGroup from '#lib/components/ui/radio-group/index.js';
 	import GoogleButton from '#lib/components/site/google-button.svelte';
 	import PhoneVerify from '#lib/components/site/phone-verify.svelte';
+	import TermsNote from '#lib/components/site/terms-note.svelte';
 	import { session } from '#lib/fake-session.svelte.js';
 
 	// Entrar y crear cuenta son la misma puerta: Google → (solo la primera vez) WhatsApp → bienvenida.
@@ -141,6 +142,7 @@
 							{sending ? 'Enviando…' : 'Enviarme un enlace para entrar'}
 						</Button>
 					</form>
+					<TermsNote />
 				{/if}
 			{:else if step === 'phone' && session.user}
 				<div class="bg-background flex items-center gap-2.5 rounded-tile px-3 py-2.5 text-sm {codeSent ? 'max-lg:hidden' : ''}">
